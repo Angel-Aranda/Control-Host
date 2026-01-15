@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{# Esto cambia el título de la pestaña del navegador #}
+{% block title %}Inicio - Control Host{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    
+    <section class="text-center py-5">
+        <h1 class="display-4 fw-bold mb-3">Bienvenido a Control Host</h1>
+        <p class="lead text-muted mb-4">Mi proyecto de Lenguaje de Marcas</p>
+        
+        <div class="d-flex gap-3 justify-content-center mb-3">
+            <a href="/login" class="btn btn-primary btn-lg">Entrar</a>
+        </div>
+        <p class="text-muted">Usuarios por defecto: <strong>admin@demo.com, usuario@demo.com</strong></p>
+        <p class="text-muted">Contraseña por defecto: <strong>password</strong></p>
+    </section>
+
+    <section class="bg-light rounded p-5 my-5">
+        <h2 class="text-center mb-4">¿Qué es Control Host?</h2>
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <p class="text-muted">
+                    <strong>Control Host</strong> es una aplicación web que hice durante las vacaciones de Navidad 
+                    para la asignatura de <strong>Lenguaje de Marcas</strong>. Es mi primer proyecto serio 
+                    combinando HTML, CSS y un framework de backend.
+                </p>
+                <p class="text-muted">
+                    He usado <strong>Flask</strong> (un framework de Python) para el backend porque me pareció 
+                    más sencillo de aprender para empezar. Para el frontend usé <strong>Bootstrap 5</strong> 
+                    para practicar el uso de frameworks CSS y que todo quede responsive.
+                </p>
+                <p class="text-muted mb-0">
+                    Aún hay muchas cosas que mejorar y funciones que añadir, pero el tiempo es limitado.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="row g-4 py-5">
+        <h2 class="text-center mb-4">Características del Proyecto</h2>
+        
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <img src="/static/images/svgs/phone-mobile.svg" alt="Mobile Phone svg" style="max-width: 40px; max-height: 40px;" class="mb-3">
+                    <h5 class="card-title">Diseño Responsive</h5>
+                    <p class="card-text text-muted">Se adapta a cualquier dispositivo gracias a Bootstrap 5</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <img src="/static/images/svgs/backend.svg" alt="Backend svg" style="max-width: 40px; max-height: 40px;" class="mb-3">
+                    <h5 class="card-title">Backend con Flask</h5>
+                    <p class="card-text text-muted">Servidor Python manejando las rutas y templates</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <img src="/static/images/svgs/clean-code.svg" alt="Clean code svg" style="max-width: 40px; max-height: 40px;" class="mb-3">
+                    <h5 class="card-title">Código Limpio</h5>
+                    <p class="card-text text-muted">Usando buenas prácticas y organización</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

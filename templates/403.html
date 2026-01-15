@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}404 - Página no encontrada{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-center">
+    <h1 class="display-1 fw-bold text-danger">403</h1>
+    <p class="fs-3"><span class="text-danger">Oops!</span> Acción no permitida.</p>
+    {% if not error %}
+    <p class="text-muted mb-4">No tienes permisos para hacer eso.</p>
+    {% else %}
+    <p class="text-muted mb-4">{{error}}</p>
+    {% endif %}
+    <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Volver al Dashboard</a>
+</div>
+{% endblock %}

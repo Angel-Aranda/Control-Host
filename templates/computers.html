@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Computers - Control Host{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="mb-5">
+        <h1 class="display-5 fw-bold mb-3">Equipos Disponibles</h1>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card shadow-sm border-0 mb-4" data-aos="fade-up">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-3">
+                <div>
+                    <a class="btn btn-primary" href="{{ url_for('computer_new') }}">Añadir equipo</a>
+                </div>
+            </div>
+            <form class="row g-3" method="get" action="{{ url_for('computers_area') }}">
+                <div class="col-md-4">
+                    <label for="hostname" class="form-label">Buscar por hostname</label>
+                    <input type="text" class="form-control" id="hostname" name="hostname" value="{{ request.args.get('hostname', '') }}" placeholder="Ej. PC-LAB-01">
+                </div>
+                <div class="col-md-3">
+                    <label for="os" class="form-label">Sistema Operativo</label>
+                    <select id="os" name="os" class="form-select">
+                        <option value="">Todos</option>
+                        {% for os_name in os_options %}
+                        <option value="{{ os_name }}" {% if request.args.get('os') == os_name %}selected{% endif %}>{{ os_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="platform" class="form-label">Plataforma</label>
+                    <select id="platform" name="platform" class="form-select">
+                        <option value="">Todos</option>
+                        {% for platform_name in platform_options %}
+                        <option value="{{ platform_name }}" {% if request.args.get('platform') == platform_name %}selected{% endif %}>{{ platform_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="ram_min" class="form-label">RAM mínima</label>
+                    <input type="number" class="form-control" id="ram_min" name="ram_min" min="0" step="1" value="{{ request.args.get('ram_min', '') }}" placeholder="8">
+                </div>
+                <div class="col-md-2">
+                    <label for="core_min" class="form-label">Núcleos mínimos</label>
+                    <input type="number" class="form-control" id="core_min" name="core_min" min="0" step="1" value="{{ request.args.get('core_min', '') }}" placeholder="8">
+                </div>
+                <div class="col-md-2 d-flex align-items-end gap-2">
+                    <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+                    <a href="{{ url_for('computers_area') }}" class="btn btn-outline-secondary w-100">Limpiar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row g-4" id="machine-container">
+        {% for computer in computers %}
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm border-0 overflow-hidden" data-aos="fade-up"> 
+                <div class="text-decoration-none"> 
+                    {% if images[computer.pc_id] %}
+                    <img
+                        alt="Image of Modern Appartment"
+                        loading="lazy"
+                        width="100%"
+                        decoding="async"
+                        data-nimg="1"
+                        class="w-full h-full object-cover group-hover:scale-125 duration-500"
+                        style="color: transparent; height: 307px"
+                        src="data:image/png;base64,{{ images[computer.pc_id] }}"
+                    />
+                    {% else %}
+                        <div class="text-center text-muted" style="align-content: center; height: 307px">
+                            <i class="bi bi-pc-display-horizontal display-1 mb-3"></i>
+                            <p> Sin señal </p>
+                        </div>
+                        
+                    {% endif %}
+                    <div class="card-body p-4">
+                        <div class="border-bottom pb-3 mb-3">
+                            <p class="text-muted mb-1 small">{{ computer.username }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0 fw-bold text-dark">{{ computer.hostname }}</h5>
+                                <span class="badge bg-primary bg-opacity-10 text-primary fw-bold">
+                                    {{ computer.cpu_architecture }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-6" style="height: 5rem;">
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <img src="/static/images/svgs/cpu_icon.svg" alt="CPU Icon" style="width: 28px; height: 28px;">
+                                    <span class="fw-bold">{{ computer.cpu_name }}</span>
+                                </div>
+                                <small class="text-muted">Procesador</small>
+                            </div>
+                            <div class="col-6">
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <img src="/static/images/svgs/cores_icon.svg" alt="Cores Icon" style="width: 28px; height: 28px;">
+                                    <span class="fw-bold">{{ computer.cpu_cores }}</span>
+                                </div>
+                                <small class="text-muted">Núcleos CPU</small>
+                            </div>
+                            <div class="col-6 height: 5rem;">
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <img src="/static/images/svgs/ram_icon.svg" alt="RAM Icon" style="width: 28px; height: 28px;">
+                                    <span class="fw-bold">{{ computer.ram }} GB</span>
+                                </div>
+                                <small class="text-muted">Memoria RAM</small>
+                            </div>
+                            <div class="col-6">
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <img src="/static/images/svgs/os_icon.svg" alt="OS Icon" style="width: 28px; height: 28px;">
+                                    <span class="fw-bold">{{ computer.os }}</span>
+                                </div>
+                                <small class="text-muted">Sistema Operativo</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <form class="mt-4 d-grid gap-2 d-sm-flex justify-content-sm-center">
+                            {% if current_user.has_role('admin') %}
+                            <a href="{{ url_for('computer_view', pc_id=computer.pc_id) }}" class="btn btn-primary" name="view">Visualizar</a>
+                            <a href="{{ url_for('computer_edit', pc_id=computer.pc_id) }}" class="btn btn-warning" name="edit">Editar</a>
+                            <a href="{{ url_for('computer_delete', pc_id=computer.pc_id) }}" class="btn btn-outline-danger" name="delete">Eliminar</a>
+                            {% endif %}
+                            {% if current_user.has_role('user') or  current_user.has_role('admin') %}
+                            <a href="{{ url_for('blocked_webs', pc_id=computer.pc_id) }}" class="btn btn-success" name="block_page" >Bloquear paginas web</a>
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% if not computers and not show_info_card %}
+        <div class="col-12">
+            <div class="card h-100 shadow-sm border-0" data-aos="fade-up">
+                <div class="card-body d-flex align-items-center justify-content-center" style="min-height: 200px;">
+                    <div class="text-center text-muted">
+                        <i class="bi bi-search display-6 mb-2"></i>
+                        <p class="mb-0">Sin resultados para estos filtros</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+    </div>
+</div>
+{% endblock %}

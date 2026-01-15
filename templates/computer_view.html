@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <p class="text-muted">Visualización en tiempo real del equipo: {{computer.hostname}}, usuario actual: {{computer.username}}</p>
+                    
+                    <img 
+                        src="{{url_for('video_src', pc_id = computer.pc_id )}}" 
+                        class="img-fluid rounded border"
+                        alt="Video del equipo"
+                    >
+                    
+                    <p class="text-muted small mt-3">Powered by Python + Flask + MSS <a class="position-absolute end-0 me-3" href="{{url_for('video_src', pc_id = computer.pc_id )}}">Full Screen</a></p>
+                    
+
+                    <form class="mt-4 d-grid gap-2 d-sm-flex justify-content-sm-center" method="post" action="{{url_for('computer_view', pc_id = computer.pc_id )}}">
+                        <button class="btn btn-danger"   name="action" value="shutdown" type="submit">Apagar</button>
+                        <button class="btn btn-warning"  name="action" value="restart" type="submit">Reiniciar</button>
+                        <button class="btn btn-info"     name="action" value="suspend" type="submit">Suspender</button>
+                        <button class="btn btn-secondary"name="action" value="logout" type="submit">Cerrar sesión</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
