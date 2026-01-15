@@ -76,10 +76,6 @@ Este comando creará los roles y usuarios por defecto
 
 <h4 id="proyect-start">Ejecutar el proyecto</h4>
 
-Para ejecutar el proyecto usaremos:
-
-` flask --app app run `
-
 Para ejecutar en Windows como permisos de administrador abrimos cmd con permisos de Administrador y una vez dentro de la carpeta del proyecto ejecutamos:
 
 ` flask --app app run `
@@ -88,7 +84,7 @@ Para ejecutar en Linux con permisos de super usuario ejecutamos el siguiente com
 
 ` sudo venv/bin/python -m flask --app app run `
 
-Si queremos que salga de localhost podemos usar el parametro ***--host 0.0.0.0***. De esta forma la aplicación empieza a ser más funcional pudiendo bloquear aplicaciones web, ver en tiempo real el ordenador y apagar el ordenador a traves de nuestro dispositivo movil.
+Si queremos que salga de localhost podemos usar el parametro ***--host 0.0.0.0***. De esta forma la aplicación empieza a ser más funcional pudiendo bloquear aplicaciones web, ver el ordenador en tiempo real y apagar el ordenador a traves de nuestro dispositivo movil.
 
 ---
 
@@ -100,7 +96,7 @@ Se usará una base de datos en sqlite, en esta habrá 5 tablas:
     - user: almacena usuarios, es creada y mantenida por el paquete flask_security
     - role: almacena los roles, es creada y mantenida por el paquete flask_security
     - roles_user: hace de tabla intermedia entre user y role, sirve para asignar roles a los usuarios, creada también por flask_security
-    - computer: almacena información de los ordenadores, tiene como clave primaria el uuid
+    - computer: almacena información de los ordenadores, tiene como clave primaria el uuid del equipo
     - blocked_websites: almacena la url de la página web y el id del ordenador que la tiene bloqueada
 
 <h4 id="proyect-routes">Rutas del proyecto</h4>
