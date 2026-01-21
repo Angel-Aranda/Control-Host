@@ -27,3 +27,4 @@ typing_extensions==4.15.0
 Werkzeug==3.1.5
 WTForms==3.2.1
 distro==1.9.0
+gunicorn

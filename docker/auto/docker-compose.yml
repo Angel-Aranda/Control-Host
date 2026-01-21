@@ -1,0 +1,14 @@
+services:
+  python:
+    image: angelluisaranda/control-host-backend:latest
+    environment:
+      - PC_UUID=${PC_UUID}docker
+    expose:
+      - "8000"
+
+  nginx:
+    image: angelluisaranda/control-host-frontend:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - python

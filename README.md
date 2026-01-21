@@ -1,3 +1,8 @@
+
+> **DOCKER**
+>
+> Consulta la guía aquí: [Despliegue con Docker](./docker/README.md)
+
 # Control Host
 ## Índice
 >[Explicación del proyecto](#proyect-explanation)

@@ -17,7 +17,7 @@ class User(db.Model, fsqla.FsUserMixin):
 
 class Computer(db.Model):
     pc_id: Mapped[str] = mapped_column(primary_key=True)
-    username: Mapped[str]
+    username: Mapped[str | None] = mapped_column(nullable=True)
     hostname: Mapped[str]
     platform: Mapped[str] = Column(Enum("Windows", "Linux", "MacOS"))
     os: Mapped[str]

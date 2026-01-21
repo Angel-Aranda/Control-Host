@@ -1,0 +1,12 @@
+FROM python:3.12-slim
+RUN apt-get update && apt-get install git sudo -y && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN git clone https://github.com/Angel-Aranda/Control-Host.git
+RUN python3 -m venv /opt/venv
+WORKDIR /Control-Host
+RUN /opt/venv/bin/pip install -r requirements-linux.txt && /opt/venv/bin/pip install gunicorn
+EXPOSE 8000
+RUN mkdir -p /docker/dmi/id/
+ENV USER=docker
+ENV HOSTNAME=docker-control-host
+RUN /opt/venv/bin/python manage.py
+CMD ["sh", "-c", "echo ${PC_UUID:-UUID_NO_DEFINIDO} > /docker/dmi/id/product_uuid && /opt/venv/bin/python -m gunicorn -b 0.0.0.0:8000 --timeout=0 --workers=4 app:app"]
