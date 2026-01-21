@@ -23,7 +23,8 @@ def shutdown():
     else:
         # Linux (systemctl es el estándar moderno)
         os.system("systemctl poweroff")
-    flash("Apagado programado en 30 segundos", "warning")
+        os.system("kill 1")
+    flash("Apagando el equipo", "warning")
 
 def restart():
     if platform.system() == 'Windows':

@@ -2,6 +2,7 @@ import os
 
 from flask import Flask, flash, redirect, render_template, request, url_for, Response
 from flask_security import Security, SQLAlchemyUserDatastore, auth_required, current_user, roles_required
+import base64
 
 from models import *
 from forms import *
@@ -16,6 +17,8 @@ if not os.path.exists(f"{os.path.abspath(os.curdir)}/db/"):
 
 Ruta404 = '404.html'
 Ruta403 = '403.html'
+
+docker = str(pc_hardware_id).lower().endswith("docker")
 
 app = Flask(__name__)
 app.config.update(
@@ -70,7 +73,6 @@ def computers_area():
 
     # Solo obtener información si NO está en la BD
     if not computer:
-
         # Guardar en BD
         computer = Computer(
             pc_id=pc_hardware_id,
@@ -82,6 +84,7 @@ def computers_area():
             cpu_architecture=info["cpu_architecture"],
             hostname=info["hostname"],
             username=info["user"],
+            docker=docker
         )
 
         db.session.add(computer)
@@ -89,7 +92,12 @@ def computers_area():
 
     # Se guarda en una lista, para que en caso de haber mas equipos y estar conectados (actualmente imposible), obtenga una captura de pantalla de cada uno de ellos
     imagenes = {}
-    imagenes[pc_hardware_id] = get_screenshot()
+    # Creamos una restricción para compatibilidad con contenedores docker (que no tienen interfaz grafica y da error cuando intentan capturar pantalla)
+    if not computer.docker:
+        imagenes[pc_hardware_id] = get_screenshot()
+    else:
+        imagenes[pc_hardware_id] = None
+        
 
     # Filtros
     hostname = request.args.get("hostname", "")
@@ -229,9 +237,12 @@ def computer_view(pc_id):
         return render_template('computer_view.html', computer=computer)
     else:
         action = request.form.get('action')
-        
-        # Validar que la acción sea válida
-        valid_actions = ['shutdown', 'restart', 'logout', 'suspend']
+        if computer.docker:
+            # Validar que la acción sea válida
+            valid_actions = ['shutdown']
+        else:
+            valid_actions = ['shutdown', 'restart', 'logout', 'suspend']
+
         if not action or action not in valid_actions:
             flash("Acción no válida", "danger")
             return redirect(url_for('computer_view',pc_id=pc_id))
@@ -252,7 +263,13 @@ def video_src(pc_id):
     if pc_id != pc_hardware_id:
         return render_template(Ruta404, error=f"El ordenador con id {pc_id} está apagado o fuera de línea"), 404
     # Esta ruta actúa como un archivo de video infinito
-    return Response(video_generator(),mimetype='multipart/x-mixed-replace; boundary=frame')
+    if not docker:
+        return Response(video_generator(),mimetype='multipart/x-mixed-replace; boundary=frame')
+    else: 
+        image_path = os.path.join(app.root_path, 'static', 'images', 'no-image.jpg')
+        with open(image_path, 'rb') as f:
+            img_bytes = f.read()
+        return Response(img_bytes, mimetype='image/jpeg')
 
 @app.route(f'/computer/blocked_webs/<pc_id>', methods=['GET', 'POST'])
 @auth_required()

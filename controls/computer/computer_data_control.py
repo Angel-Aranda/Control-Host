@@ -7,9 +7,23 @@ import psutil
 def get_pc_id():
     sistema = platform.system()
     if sistema == "Linux":
+
+        # Opción 1: Para contenedores Docker
+        try:
+            result = subprocess.run(
+                ['cat', '/docker/dmi/id/product_uuid'],
+                capture_output=True,
+                text=True,
+                timeout=30
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                return result.stdout.strip()
+        except (subprocess.TimeoutExpired, FileNotFoundError):
+            pass
+        
         # Intentar leer UUID con permisos elevados usando pkexec o sudo
         try:
-            # Opción 1: pkexec (GUI password prompt)
+            # Opción 2: pkexec (GUI password prompt)
             result = subprocess.run(
                 ['pkexec', 'cat', '/sys/class/dmi/id/product_uuid'],
                 capture_output=True,
@@ -20,8 +34,8 @@ def get_pc_id():
                 return result.stdout.strip()
         except (subprocess.TimeoutExpired, FileNotFoundError):
             pass
-        
-        # Opción 2: sudo (CLI password prompt)
+
+        # Opción 3: sudo (CLI password prompt)
         try:
             result = subprocess.run(
                 ['sudo', 'cat', '/sys/class/dmi/id/product_uuid'],
@@ -33,6 +47,7 @@ def get_pc_id():
                 return result.stdout.strip()
         except subprocess.TimeoutExpired:
             pass
+
     elif sistema == "Windows":
         try:
             cmd = 'powershell -Command "(Get-CimInstance -Class Win32_ComputerSystemProduct).UUID"'
@@ -57,7 +72,7 @@ def get_pc_info():
             "platform": platform.system(),
             "ram_memory": round(ram_info.total / (1024 ** 3) + 0.5, 0),
             "cpu_architecture": platform.machine(),
-            "hostname": platform.node(),
+            "hostname": os.getenv("HOSTNAME") or platform.node(),
             "user": os.getenv("USER") or os.getenv("USERNAME"),
         }
     if platform.system() == "Linux":
