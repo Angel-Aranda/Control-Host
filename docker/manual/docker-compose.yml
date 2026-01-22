@@ -7,6 +7,8 @@ services:
       - PC_UUID=${PC_UUID}docker
     expose:
       - "8000"
+    depends_on:
+      - nginx
 
   nginx:
     build:
@@ -14,5 +16,3 @@ services:
       dockerfile: Dockerfile-nginx
     ports:
       - "80:80"
-    depends_on:
-      - python

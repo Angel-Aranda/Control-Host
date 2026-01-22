@@ -1,4 +1,11 @@
+
 # Control-Host Docker
+
+> **Opciones de despliegue:**
+>
+> - [Despliegue Automático (auto)](./auto/): Scripts y Docker Compose para levantar todo automáticamente.
+> - [Despliegue Manual (manual)](./manual/): Instrucciones para lanzar los servicios paso a paso o usando imágenes ya subidas.
+
 
 ## Índice
 

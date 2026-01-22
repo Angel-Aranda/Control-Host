@@ -25,7 +25,8 @@ class Computer(db.Model):
     cpu_cores: Mapped[int]
     cpu_architecture: Mapped[str]
     cpu_name: Mapped[str]
-
+    docker: Mapped[bool] = mapped_column(default=False, nullable=True)
+    
     blocked_websites: Mapped[list["Blocked_websites"]] = relationship(back_populates="computer", cascade="all, delete-orphan")
 
 

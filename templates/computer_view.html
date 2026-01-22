@@ -18,10 +18,14 @@
                     
 
                     <form class="mt-4 d-grid gap-2 d-sm-flex justify-content-sm-center" method="post" action="{{url_for('computer_view', pc_id = computer.pc_id )}}">
+                        {% if computer.docker %}
+                        <button class="btn btn-danger"   name="action" value="shutdown" type="submit">Apagar</button>
+                        {% else %}
                         <button class="btn btn-danger"   name="action" value="shutdown" type="submit">Apagar</button>
                         <button class="btn btn-warning"  name="action" value="restart" type="submit">Reiniciar</button>
                         <button class="btn btn-info"     name="action" value="suspend" type="submit">Suspender</button>
                         <button class="btn btn-secondary"name="action" value="logout" type="submit">Cerrar sesión</button>
+                        {% endif %}
                     </form>
                 </div>
             </div>

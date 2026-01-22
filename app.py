@@ -73,7 +73,6 @@ def computers_area():
 
     # Solo obtener información si NO está en la BD
     if not computer:
-
         # Guardar en BD
         computer = Computer(
             pc_id=pc_hardware_id,
@@ -85,6 +84,7 @@ def computers_area():
             cpu_architecture=info["cpu_architecture"],
             hostname=info["hostname"],
             username=info["user"],
+            docker=docker
         )
 
         db.session.add(computer)
@@ -92,7 +92,7 @@ def computers_area():
 
     # Se guarda en una lista, para que en caso de haber mas equipos y estar conectados (actualmente imposible), obtenga una captura de pantalla de cada uno de ellos
     imagenes = {}
-    # Creamos una restricción para compatibilidad con contenedores docker (que no tienen interfaz grafica y da error cuando intentan capturar pantalla)
+        # Creamos una restricción para compatibilidad con contenedores docker (que no tienen interfaz grafica y da error cuando intentan capturar pantalla)
     if not docker:
         imagenes[pc_hardware_id] = get_screenshot()
     else:
@@ -237,9 +237,12 @@ def computer_view(pc_id):
         return render_template('computer_view.html', computer=computer)
     else:
         action = request.form.get('action')
-        
-        # Validar que la acción sea válida
-        valid_actions = ['shutdown', 'restart', 'logout', 'suspend']
+        if computer.docker:
+            # Validar que la acción sea válida
+            valid_actions = ['shutdown']
+        else:
+            valid_actions = ['shutdown', 'restart', 'logout', 'suspend']
+
         if not action or action not in valid_actions:
             flash("Acción no válida", "danger")
             return redirect(url_for('computer_view',pc_id=pc_id))
