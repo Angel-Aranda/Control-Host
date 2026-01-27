@@ -9,9 +9,6 @@ def get_pc_id():
     if sistema == "Linux":
 
         # Opción 1: Para contenedores Docker
-<<<<<<< HEAD
-        try:
-=======
         try:
             result = subprocess.run(
                 ['cat', '/docker/dmi/id/product_uuid'],
@@ -27,14 +24,14 @@ def get_pc_id():
         # Intentar leer UUID con permisos elevados usando pkexec o sudo
         try:
             # Opción 2: pkexec (GUI password prompt)
->>>>>>> 337f7bf30410a6523420f904213573fea8d8082d
+
             result = subprocess.run(
                 ['cat', '/docker/dmi/id/product_uuid'],
                 capture_output=True,
                 text=True,
                 timeout=30
             )
-<<<<<<< HEAD
+
             return result.stdout.strip()
         except subprocess.TimeoutExpired:
             pass
@@ -65,25 +62,6 @@ def get_pc_id():
                     return result.stdout.strip()
             except subprocess.TimeoutExpired:
                 pass
-=======
-            if result.returncode == 0 and result.stdout.strip():
-                return result.stdout.strip()
-        except (subprocess.TimeoutExpired, FileNotFoundError):
-            pass
-
-        # Opción 3: sudo (CLI password prompt)
-        try:
-            result = subprocess.run(
-                ['sudo', 'cat', '/sys/class/dmi/id/product_uuid'],
-                capture_output=True,
-                text=True,
-                timeout=30
-            )
-            if result.returncode == 0 and result.stdout.strip():
-                return result.stdout.strip()
-        except subprocess.TimeoutExpired:
-            pass
->>>>>>> 337f7bf30410a6523420f904213573fea8d8082d
 
     elif sistema == "Windows":
         try:

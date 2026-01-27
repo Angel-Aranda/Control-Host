@@ -1,8 +1,8 @@
 FROM python:3.12-slim
-RUN apt-get update && apt-get install git sudo -y && apt-get clean && rm -rf /var/lib/apt/lists/*
-RUN git clone https://github.com/Angel-Aranda/Control-Host.git
-RUN python3 -m venv /opt/venv
+RUN apt-get update && apt-get install sudo -y && apt-get clean && rm -rf /var/lib/apt/lists/*
+ADD https://github.com/Angel-Aranda/Control-Host.git /Control-Host
 WORKDIR /Control-Host
+RUN python3 -m venv /opt/venv
 RUN /opt/venv/bin/pip install -r requirements-linux.txt && /opt/venv/bin/pip install gunicorn
 EXPOSE 8000
 RUN mkdir -p /docker/dmi/id/
